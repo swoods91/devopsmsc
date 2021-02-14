@@ -1,0 +1,33 @@
+provider "aws" {
+  access_key = "Enter here"
+  secret_key = "Enter here"
+  region = "eu-west-1"
+}
+
+resource "aws_instance" "demo" {
+  ami = "ami-0bb3fad3c0286ebd5"
+  instance_type = "t2.micro"
+  key_name = "TU_Dublin"
+  security_groups = [aws_security_group.default.name]
+
+  tags = {
+	Name = "Demo"
+  }
+}
+resource "aws_eip" "default" {
+  instance = aws_instance
+  vpc      = true
+}
+
+resource "aws_security_group" "default" {
+  name        = "eip_example"
+  description = "Used in the terraform"
+
+  # SSH access from anywhere
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  }

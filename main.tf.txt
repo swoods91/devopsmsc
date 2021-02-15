@@ -15,7 +15,7 @@ resource "aws_instance" "demo" {
   }
 }
 resource "aws_eip" "default" {
-  instance = aws_instance
+  instance = aws_instance.demo.id
   vpc      = true
 }
 

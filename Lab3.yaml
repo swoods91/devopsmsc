@@ -1,16 +1,30 @@
 - name: Setting-up webserver
-  hosts: all
+  hosts: servers
+  vars:
+    http_port: 80
+    max_clients: 200
+  user: root
   tasks:
-- name: Installing httpd software
-        package:
-                name: "httpd"
-                state: present
-- name: Copying webpage
-        copy:
-                src: home.html
-                dest: /var/www/html/
-- name: Starting httpd services
-        service:
-                name: "httpd"
-                state: started
-                enabled: yes
+    -
+      name: Installing httpd software
+      package:
+        name: "httpd"
+        state: latest
+    -
+      name: Copying webpage
+      copy:
+        src: home.html
+        dest: /var/www/html/
+    -
+      name: Starting httpd services
+      service:
+         name: "httpd"
+         state: started
+         enabled: yes
+    -
+      name: "Open port 80 for http access"
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+

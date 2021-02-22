@@ -1,0 +1,25 @@
+--- 
+- 
+  hosts: servers
+  tasks: 
+    -
+      name: "Get Bucket files"
+      amazon.aws.aws_s3:
+        bucket: demo-retailbuckettesting-1xpszdipuqjv
+        object: *
+        dest: /usr/local/
+        mode: get
+    - 
+      name: "Update cache"
+      yum: update_cache=yes
+    - 
+      name: "Install Apache"
+      yum: "name={{ package }} state=present"
+    - 
+      name: "mys3Bucket"
+      suffix: index.html
+    - 
+      name: "Start Apache"
+      service: "name={{ package }} state=started"
+  vars: 
+    package: httpd

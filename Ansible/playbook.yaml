@@ -1,19 +1,12 @@
---- 
-- 
+---
+-
   hosts: servers
-  tasks: 
-    - name: "Git Checkout Website"
-      ansible.builtin.git:
-        repo: 'https://github.com/Bayonnaise/clothing-website.git'
-        dest: /var/www/html       
-    - 
-      name: "Update cache"
-      yum: update_cache=yes
-    - 
-      name: "Install Apache"
-      yum: "name={{ package }} state=present"
-    - 
-      name: "Start Apache"
-      service: "name={{ package }} state=started"
-  vars: 
-    package: httpd
+  tasks:
+  - name: Install apache packages
+    yum:
+      name: apache2
+      state: present
+  - name: ensure httpd is running
+    service:
+      name: apache2
+      state: started
